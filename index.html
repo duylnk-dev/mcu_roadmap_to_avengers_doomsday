@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCU Roadmap - Lộ Trình Đến Avengers: Doomsday</title>
+
+  <!-- Google Fonts: Oswald (Tiêu đề) & Montserrat (Nội dung) - Hỗ trợ Tiếng Việt 100% -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            title: ['Oswald', 'sans-serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            doomsday: {
+              50: '#ecfdf5',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
+              950: '#022c22',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS for Scrollbars & Special Aesthetics -->
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #090d16;
+      color: #f1f5f9;
+    }
+    .font-title {
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.05em;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
+    }
+
+    /* Glow Effects */
+    .glow-green {
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.4);
+    }
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.25);
+    }
+
+    /* Glass Effect */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-700 flex items-center justify-center text-slate-950 font-black text-xl font-title shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-mask"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold font-title tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-200">
+            MCU ROADMAP
+          </h1>
+          <p class="text-[11px] text-slate-400 font-medium">Hành trình hướng tới <span class="text-emerald-400 font-bold">AVENGERS: DOOMSDAY</span></p>
+        </div>
+      </div>
+
+      <!-- Action Tools -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <!-- Search Input -->
+        <div class="relative min-w-[160px] sm:min-w-[220px]">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input id="search-input" type="text" placeholder="Tìm tên phim, nhân vật..." 
+            class="w-full bg-slate-900/90 text-xs text-slate-200 pl-8 pr-3 py-2 rounded-lg border border-slate-700 focus:outline-none focus:border-emerald-500 transition-colors">
+        </div>
+
+        <!-- View Mode Toggle Buttons -->
+        <div class="flex items-center bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs font-semibold">
+          <button id="view-flow-btn" class="px-3 py-1.5 rounded-md bg-emerald-500 text-slate-950 font-bold transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span class="hidden sm:inline">Sơ Đồ</span>
+          </button>
+          <button id="view-grid-btn" class="px-3 py-1.5 rounded-md text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-border-all"></i>
+            <span class="hidden sm:inline">Lưới Phase</span>
+          </button>
+        </div>
+
+        <!-- Reset Button -->
+        <button id="reset-watch-btn" title="Đặt lại trạng thái đã xem" class="p-2 rounded-lg bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500/40 text-xs transition-colors">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-6">
+
+    <!-- OVERVIEW DASHBOARD & PROGRESS -->
+    <section class="glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-xl relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        
+        <!-- Left Stats -->
+        <div class="flex-1 space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold uppercase tracking-wider">
+              Multiverse Saga Central
+            </span>
+            <span class="text-xs text-slate-400">• Dự kiến khởi chiếu 2026</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold font-title text-slate-100">
+            Tất Cả Con Đường Đều Dẫn Tới Doctor Doom
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+            Sơ đồ tổng hợp các phim Điện Ảnh (Movies), TV Series, Hoạt Hình và Đặc Diện Street-Level của Marvel Studios. Đánh dấu các tác phẩm bạn đã xem để chuẩn bị hành trang tốt nhất trước khi bước vào <strong class="text-emerald-400">Avengers: Doomsday</strong>!
+          </p>
+        </div>
+
+        <!-- Right Watch Progress Box -->
+        <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl min-w-[260px] flex flex-col justify-center">
+          <div class="flex items-center justify-between text-xs mb-2">
+            <span class="text-slate-400 font-semibold"><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i> Tiến Độ Đã Xem</span>
+            <span id="progress-text" class="font-bold text-emerald-400">0 / 0 (0%)</span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 mb-2">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-green-400 w-0 transition-all duration-500"></div>
+          </div>
+          <div class="flex justify-between items-center text-[10px] text-slate-400">
+            <span>Trạng thái tự động lưu local</span>
+            <span id="essential-counter" class="text-emerald-300 font-semibold">Trọng tâm: 0/0</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FILTER CONTROLS BAR -->
+      <div class="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+        
+        <!-- Filter Tabs -->
+        <div class="flex items-center gap-1.5 flex-wrap" id="filter-tabs">
+          <button data-filter="all" class="filter-tab active px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold transition-all">
+            Tất Cả
+          </button>
+          <button data-filter="essential" class="filter-tab px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-slate-600 font-semibold transition-all flex items-center gap-1">
+            <i class="fa-solid fa-bolt text-emerald-400"></i> Trọng Tâm Doomsday
+          </button>
+          <button data-filter="movie" class="filter-tab px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-slate-600 font-semibold transition-all">
+            <i class="fa-solid fa-film text-emerald-400 mr-1"></i> Movies
+          </button>
+          <button data-filter="series" class="filter-tab px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-slate-600 font-semibold transition-all">
+            <i class="fa-solid fa-tv text-blue-400 mr-1"></i> TV Series
+          </button>
+          <button data-filter="unwatched" class="filter-tab px-3 py-1.5 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700 hover:border-slate-600 font-semibold transition-all">
+            <i class="fa-regular fa-circle mr-1"></i> Chưa Xem
+          </button>
+        </div>
+
+        <!-- Phase Selector -->
+        <div class="flex items-center gap-2">
+          <label for="phase-select" class="text-slate-400 font-medium">Giai đoạn:</label>
+          <select id="phase-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-emerald-500">
+            <option value="all">Tất cả Phase</option>
+            <option value="Phase 1">Phase 1</option>
+            <option value="Phase 2">Phase 2</option>
+            <option value="Phase 3">Phase 3</option>
+            <option value="Phase 4">Phase 4</option>
+            <option value="Phase 5">Phase 5</option>
+            <option value="Phase 6">Phase 6</option>
+            <option value="Marvel TV">Marvel Television / Street</option>
+          </select>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 1: FLOWCHART ROADMAP VIEW -->
+    <section id="flow-view-section" class="space-y-6">
+      
+      <!-- Flow Column Headers & Nodes Container -->
+      <div class="overflow-x-auto pb-8">
+        <div class="min-w-[760px] grid grid-cols-2 gap-6 relative">
+          
+          <!-- LEFT BRANCH: MARVEL TELEVISION & STREET LEVEL -->
+          <div class="flex flex-col gap-4">
+            <!-- Header for Left Branch -->
+            <div class="bg-slate-900 p-3.5 rounded-xl border border-blue-500/40 text-center font-bold text-blue-400 font-title text-sm tracking-wide shadow-lg">
+              <i class="fa-solid fa-tv mr-2"></i> NHÁNH TV SERIES, HOẠT HÌNH & STREET-LEVEL
+            </div>
+
+            <!-- Card Nodes List Left -->
+            <div id="left-branch-nodes" class="space-y-4">
+              <!-- Dynamically Populated via JS -->
+            </div>
+          </div>
+
+          <!-- RIGHT BRANCH: MAIN MOVIES & INFINITY / MULTIVERSE SAGA -->
+          <div class="flex flex-col gap-4">
+            <!-- Header for Right Branch -->
+            <div class="bg-slate-900 p-3.5 rounded-xl border border-emerald-500/40 text-center font-bold text-emerald-400 font-title text-sm tracking-wide shadow-lg">
+              <i class="fa-solid fa-film mr-2"></i> NHÁNH CHÍNH: CÁC PHIM CHIẾU RẠP (MOVIES)
+            </div>
+
+            <!-- Card Nodes List Right -->
+            <div id="right-branch-nodes" class="space-y-4">
+              <!-- Dynamically Populated via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Convergence Pointer to Avengers Doomsday -->
+        <div class="mt-10 flex flex-col items-center justify-center relative">
+          <div class="w-1 h-12 bg-gradient-to-b from-emerald-500 via-emerald-400 to-green-500 animate-pulse"></div>
+          <div class="w-4 h-4 border-r-2 border-b-2 border-emerald-400 transform rotate-45 -mt-2"></div>
+          
+          <!-- DOOMSDAY FINAL DESTINATION BANNER -->
+          <div id="doomsday-destination" class="mt-4 w-full max-w-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 p-6 rounded-2xl border-2 border-emerald-500/80 shadow-[0_0_50px_rgba(16,185,129,0.3)] text-center relative overflow-hidden group cursor-pointer hover:scale-[1.01] transition-transform">
+            <div class="absolute -right-8 -bottom-8 text-emerald-500/10 text-9xl font-black font-title pointer-events-none">DOOM</div>
+            
+            <span class="inline-block bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30 font-bold mb-3 tracking-widest uppercase">
+              <i class="fa-solid fa-crown mr-1"></i> ĐÍCH ĐẾN TỐI THƯỢNG • MAY 2026
+            </span>
+            
+            <h2 class="text-3xl sm:text-4xl font-black font-title text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-green-200 to-emerald-400 mb-2">
+              AVENGERS: DOOMSDAY
+            </h2>
+            
+            <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto mb-4 leading-relaxed">
+              Robert Downey Jr. trở lại MCU trong vai Victor Von Doom (Doctor Doom). Tất cả các nhánh Đa Vũ Trụ, Fantastic Four, X-Men, Thunderbolts và Avengers chính thức hội tụ tại trận chiến này!
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-2.5 text-xs text-slate-400 font-semibold">
+              <span class="bg-slate-800/90 px-3 py-1 rounded-md border border-slate-700 text-emerald-300"><i class="fa-solid fa-masks-theater text-emerald-400 mr-1.5"></i> Doctor Doom</span>
+              <span class="bg-slate-800/90 px-3 py-1 rounded-md border border-slate-700 text-blue-300"><i class="fa-solid fa-infinity text-blue-400 mr-1.5"></i> Multiverse Saga</span>
+              <span class="bg-slate-800/90 px-3 py-1 rounded-md border border-slate-700 text-purple-300"><i class="fa-solid fa-shield-halved text-purple-400 mr-1.5"></i> Secret Wars Prelude</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: PHASE GRID VIEW (HIDDEN BY DEFAULT) -->
+    <section id="grid-view-section" class="hidden space-y-8">
+      <div id="grid-phases-container" class="space-y-8">
+        <!-- Dynamically rendered phase sections -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: ITEM DETAIL POPUP -->
+  <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel max-w-2xl w-full rounded-2xl border border-slate-700 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Modal Header Banner -->
+      <div class="relative bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 p-6 border-b border-slate-800 flex items-start justify-between">
+        <div class="space-y-1 pr-6">
+          <div class="flex items-center gap-2">
+            <span id="modal-type-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase border">Movie</span>
+            <span id="modal-phase" class="text-xs text-slate-400 font-semibold">Phase 1</span>
+            <span id="modal-year" class="text-xs text-slate-400">• 2008</span>
+          </div>
+          <h3 id="modal-title" class="text-2xl font-bold font-title text-slate-100">Iron Man</h3>
+        </div>
+
+        <button id="modal-close-btn" class="text-slate-400 hover:text-slate-100 bg-slate-800/80 p-2 rounded-xl border border-slate-700 hover:border-slate-500 transition-colors">
+          <i class="fa-solid fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body Scrollable Content -->
+      <div class="p-6 space-y-5 overflow-y-auto text-xs sm:text-sm text-slate-300">
+        
+        <!-- Plot Summary -->
+        <div>
+          <h4 class="text-xs font-bold font-title text-slate-400 uppercase tracking-wider mb-1.5">Tóm Tắt Nội Dung</h4>
+          <p id="modal-desc" class="leading-relaxed text-slate-200"></p>
+        </div>
+
+        <!-- Connection to Avengers Doomsday -->
+        <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/30">
+          <h4 class="text-xs font-bold font-title text-emerald-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-bolt"></i> Liên Quan Tới Avengers: Doomsday
+          </h4>
+          <p id="modal-doomsday-link" class="text-slate-300 text-xs leading-relaxed"></p>
+        </div>
+
+        <!-- Key Characters -->
+        <div>
+          <h4 class="text-xs font-bold font-title text-slate-400 uppercase tracking-wider mb-2">Nhân Vật Trọng Tâm</h4>
+          <div id="modal-characters" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
+        <button id="modal-toggle-watch" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-check"></i> Đánh Dấu Đã Xem
+        </button>
+        <span class="text-[11px] text-slate-500">MCU Official Timeline</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CUSTOM CONFIRMATION DIALOG (No alert or confirm) -->
+  <div id="confirm-dialog" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+    <div class="glass-panel max-w-sm w-full p-6 rounded-2xl border border-slate-800 text-center space-y-4 shadow-2xl">
+      <div class="w-12 h-12 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto text-xl border border-red-500/30">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold font-title text-slate-100">Xác Nhận Đặt Lại?</h3>
+        <p class="text-xs text-slate-400 mt-1">Toàn bộ trạng thái "Đã Xem" của bạn sẽ được làm mới về ban đầu.</p>
+      </div>
+      <div class="flex items-center justify-center gap-3 pt-2">
+        <button id="confirm-cancel" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold">Hủy Bỏ</button>
+        <button id="confirm-ok" class="px-4 py-2 rounded-xl bg-red-500 text-white hover:bg-red-600 text-xs font-bold">Đặt Lại Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-12 border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="mb-1">Cập nhật theo lộ trình mới nhất của Marvel Studios cho Phase 1 - Phase 6.</p>
+      <p class="text-[10px] text-slate-600">Ứng dụng trực quan hóa MCU Roadmap - Thiết kế cho các tín đồ điện ảnh Marvel.</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // MCU DATASET (Flowchart order matching image left & right branches)
+    const mcuData = [
+      // RIGHT BRANCH (Movies)
+      { id: 'iron-man', title: 'Iron Man', type: 'movie', phase: 'Phase 1', releaseYear: '2008', branch: 'right', essential: true, desc: 'Khởi đầu Vũ trụ Điện ảnh Marvel với việc tỷ phú Tony Stark chế tạo bộ giáp Iron Man.', doomsdayLink: 'Robert Downey Jr. (người đóng Iron Man) sẽ trở lại MCU dưới vai trò Victor Von Doom (Doctor Doom).', characters: ['Tony Stark / Iron Man', 'Pepper Potts', 'Rhodey'] },
+      { id: 'incredible-hulk', title: 'The Incredible Hulk', type: 'movie', phase: 'Phase 1', releaseYear: '2008', branch: 'right', essential: false, desc: 'Bruce Banner tìm kiếm phương thuốc chữa trị chứng biến hình khổng lồ xanh Hulk.', doomsdayLink: 'Giới thiệu Thể loại Gamma và các nhân vật xuất hiện lại trong Captain America 4 & Brave New World.', characters: ['Bruce Banner / Hulk', 'Emil Blonsky / Abomination'] },
+      { id: 'iron-man-2', title: 'Iron Man 2', type: 'movie', phase: 'Phase 1', releaseYear: '2010', branch: 'right', essential: false, desc: 'Tony Stark đối mặt với sức ép từ chính phủ và đối thủ Ivan Vanko.', doomsdayLink: 'Lần đầu xuất hiện Black Widow và phát triển công nghệ Arc Reactor.', characters: ['Tony Stark', 'Black Widow', 'War Machine'] },
+      { id: 'thor', title: 'Thor', type: 'movie', phase: 'Phase 1', releaseYear: '2011', branch: 'right', essential: false, desc: 'Hoàng tử Asgard Thor bị tước sức mạnh và đày xuống Trái Đất.', doomsdayLink: 'Mở ra thế giới thần thoại Asgard và ma thuật không gian Tesseract.', characters: ['Thor', 'Loki', 'Odin', 'Jane Foster'] },
+      { id: 'captain-america-1', title: 'Captain America: The First Avenger', type: 'movie', phase: 'Phase 1', releaseYear: '2011', branch: 'right', essential: true, desc: 'Steve Rogers trở thành Siêu Binh Sĩ chiến đấu chống lại HYDRA thời Chiến tranh Thế giới II.', doomsdayLink: 'Giới thiệu Tesseract (Viên đá Không Gian) và lý tưởng anh hùng tiền đề.', characters: ['Steve Rogers', 'Bucky Barnes', 'Red Skull'] },
+      { id: 'avengers-1', title: 'The Avengers', type: 'movie', phase: 'Phase 1', releaseYear: '2012', branch: 'right', essential: true, desc: 'Nhóm siêu anh hùng đầu tiên tập hợp ngăn chặn Loki xâm lược New York.', doomsdayLink: 'Cột mốc đầu tiên kết nối dòng thời gian Trái Đất và Vũ trụ.', characters: ['Iron Man', 'Captain America', 'Thor', 'Hulk', 'Black Widow', 'Hawkeye'] },
+      { id: 'iron-man-3', title: 'Iron Man 3', type: 'movie', phase: 'Phase 1', releaseYear: '2013', branch: 'right', essential: false, desc: 'Tony Stark giải quyết sang chấn tâm lý sau thảm họa New York.', doomsdayLink: 'Sự phát triển công nghệ giáp điều khiển từ xa của Stark.', characters: ['Tony Stark', 'Mandarin (Fake)', 'Aldrich Killian'] },
+      { id: 'thor-2', title: 'Thor: The Dark World', type: 'movie', phase: 'Phase 2', releaseYear: '2013', branch: 'right', essential: false, desc: 'Thor hợp tác với Loki để chống lại Yêu Tinh Bóng Tối Malekith và Aether.', doomsdayLink: 'Giới thiệu Viên đá Thực Tại (Aether).', characters: ['Thor', 'Loki', 'Jane Foster'] },
+      { id: 'captain-america-2', title: 'Captain America: The Winter Soldier', type: 'movie', phase: 'Phase 2', releaseYear: '2014', branch: 'right', essential: false, desc: 'Steve Rogers phát hiện HYDRA thâm nhập sâu vào S.H.I.E.L.D.', doomsdayLink: 'Thiết lập nền tảng chính trị và nhân vật Bucky Barnes cho Thunderbolts.', characters: ['Steve Rogers', 'Bucky Barnes', 'Falcon', 'Black Widow'] },
+      { id: 'gotg-1', title: 'Guardians of the Galaxy', type: 'movie', phase: 'Phase 2', releaseYear: '2014', branch: 'right', essential: false, desc: 'Nhóm Vệ Binh Vũ Trụ hình thành để bảo vệ Viên đá Sức Mạnh khỏi Ronan.', doomsdayLink: 'Mở rộng quy mô Vũ Trụ Marvel.', characters: ['Star-Lord', 'Gamora', 'Drax', 'Rocket', 'Groot'] },
+      { id: 'avengers-2', title: 'Avengers: Age of Ultron', type: 'movie', phase: 'Phase 2', releaseYear: '2015', branch: 'right', essential: true, desc: 'Trí tuệ nhân tạo Ultron đe dọa tận thế Trái Đất.', doomsdayLink: 'Giới thiệu Scarlet Witch và mối lo ngại về viễn cảnh tận thế của Tony Stark.', characters: ['Iron Man', 'Wanda Maximoff', 'Vision', 'Ultron'] },
+      { id: 'ant-man-1', title: 'Ant-Man', type: 'movie', phase: 'Phase 2', releaseYear: '2015', branch: 'right', essential: true, desc: 'Scott Lang khoác lên mình bộ giáp Ant-Man thu nhỏ.', doomsdayLink: 'Lần đầu khám phá Lượng Tử Giới (Quantum Realm) - chìa khóa du hành thời gian.', characters: ['Scott Lang', 'Hank Pym', 'Hope van Dyne'] },
+      { id: 'civil-war', title: 'Captain America: Civil War', type: 'movie', phase: 'Phase 3', releaseYear: '2016', branch: 'right', essential: true, desc: 'Hiệp định Sokovia làm nội bộ Avengers chia rẽ thành 2 phe.', doomsdayLink: 'Giới thiệu Black Panther và Spider-Man vào MCU.', characters: ['Captain America', 'Iron Man', 'Spider-Man', 'Black Panther'] },
+      { id: 'doctor-strange-1', title: 'Doctor Strange', type: 'movie', phase: 'Phase 3', releaseYear: '2016', branch: 'right', essential: true, desc: 'Bác sĩ Stephen Strange học ma thuật và trở thành Phù Thủy Tối Thượng.', doomsdayLink: 'Giới thiệu Viên đá Thời Gian và khái niệm Đa Vũ Trụ / Chiều không gian.', characters: ['Stephen Strange', 'Wong', 'Ancient One'] },
+      { id: 'gotg-2', title: 'Guardians of the Galaxy Vol. 2', type: 'movie', phase: 'Phase 3', releaseYear: '2017', branch: 'right', essential: false, desc: 'Star-Lord tìm hiểu về nguồn gốc hành tinh Ego người cha của mình.', doomsdayLink: 'Mở rộng kiến thức về các sinh thể vũ trụ Celestials.', characters: ['Star-Lord', 'Ego', 'Mantis'] },
+      { id: 'spider-man-homecoming', title: 'Spider-Man: Homecoming', type: 'movie', phase: 'Phase 3', releaseYear: '2017', branch: 'right', essential: false, desc: 'Peter Parker cân bằng cuộc sống trung học và làm người hùng xóm giềng.', doomsdayLink: 'Sự dìu dắt của Tony Stark dành cho Peter Parker.', characters: ['Peter Parker', 'Tony Stark', 'Vulture'] },
+      { id: 'thor-3', title: 'Thor: Ragnarok', type: 'movie', phase: 'Phase 3', releaseYear: '2017', branch: 'right', essential: false, desc: 'Asgard sụp đổ trước Nữ thần Cái chết Hela.', doomsdayLink: 'Thiết lập các sự kiện trực tiếp dẫn tới cuộc chiến Infinity War.', characters: ['Thor', 'Loki', 'Hulk', 'Valkyrie'] },
+      { id: 'black-panther-1', title: 'Black Panther', type: 'movie', phase: 'Phase 3', releaseYear: '2018', branch: 'right', essential: false, desc: 'T\'Challa trở thành vua của Wakanda và bảo vệ nguồn Vibranium.', doomsdayLink: 'Xây dựng quốc gia Wakanda vững chắc cho chiến trường Đa Vũ Trụ.', characters: ['T\'Challa', 'Killmonger', 'Shuri'] },
+      { id: 'infinity-war', title: 'Avengers: Infinity War', type: 'movie', phase: 'Phase 3', releaseYear: '2018', branch: 'right', essential: true, desc: 'Thanos thu thập 6 Viên đá Vô Cực và quét sạch nửa số sinh linh vũ trụ.', doomsdayLink: 'Sự kiện cú búng tay biến đổi toàn bộ vũ trụ và đa vũ trụ.', characters: ['Avengers', 'Thanos', 'Guardians of the Galaxy'] },
+      { id: 'ant-man-2', title: 'Ant-Man and the Wasp', type: 'movie', phase: 'Phase 3', releaseYear: '2018', branch: 'right', essential: true, desc: 'Scott Lang giải cứu Janet van Dyne khỏi Lượng Tử Giới.', doomsdayLink: 'Thiết lập cổng du hành Lượng Tử Giới.', characters: ['Scott Lang', 'Hope van Dyne', 'Janet van Dyne'] },
+      { id: 'captain-marvel', title: 'Captain Marvel', type: 'movie', phase: 'Phase 3', releaseYear: '2019', branch: 'right', essential: false, desc: 'Nguồn gốc sức mạnh cosmic của Carol Danvers.', doomsdayLink: 'Giới thiệu tộc Kree, Skrull và sức mạnh cấp Vũ trụ.', characters: ['Carol Danvers', 'Nick Fury'] },
+      { id: 'endgame', title: 'Avengers: Endgame', type: 'movie', phase: 'Phase 3', releaseYear: '2019', branch: 'right', essential: true, desc: 'Avengers du hành thời gian đảo ngược cú búng tay của Thanos. Tony Stark hy sinh.', doomsdayLink: 'Di sản của Tony Stark để lại khoảng trống lớn dẫn tới sự trỗi dậy của Doctor Doom.', characters: ['Iron Man', 'Captain America', 'Thor', 'Thanos'] },
+      { id: 'spider-man-far-from-home', title: 'Spider-Man: Far From Home', type: 'movie', phase: 'Phase 3', releaseYear: '2019', branch: 'right', essential: false, desc: 'Peter Parker đối mặt với ảo ảnh Mysterio tại Châu Âu.', doomsdayLink: 'Lần đầu tiên lừa dối công chúng bằng khái niệm Đa Vũ Trụ giả định.', characters: ['Peter Parker', 'Mysterio', 'Nick Fury'] },
+      { id: 'black-widow', title: 'Black Widow', type: 'movie', phase: 'Phase 4', releaseYear: '2021', branch: 'right', essential: false, desc: 'Natasha Romanoff đối mặt với quá khứ ở Phòng Đỏ.', doomsdayLink: 'Giới thiệu Yelena Belova và Red Guardian cho Thunderbolts.', characters: ['Natasha Romanoff', 'Yelena Belova', 'Red Guardian'] },
+      { id: 'shang-chi', title: 'Shang-Chi', type: 'movie', phase: 'Phase 4', releaseYear: '2021', branch: 'right', essential: true, desc: 'Shang-Chi khám phá bí ẩn Mười Vòng (Ten Rings).', doomsdayLink: 'Mười Vòng phát ra tín hiệu viễn cổ ngoài vũ trụ liên quan tới Kang / Doomsday.', characters: ['Shang-Chi', 'Wenwu', 'Katy'] },
+      { id: 'eternals', title: 'Eternals', type: 'movie', phase: 'Phase 4', releaseYear: '2021', branch: 'right', essential: true, desc: 'Những sinh thể bất tử Chủng Tộc Chủng Sinh bảo vệ Trái Đất.', doomsdayLink: 'Sự xuất hiện của Celestial Tiamut trên đại dương (tiền đề cho Captain America 4 & Adamantium).', characters: ['Sersi', 'Ikaris', 'Thena'] },
+      { id: 'spider-man-no-way-home', title: 'Spider-Man: No Way Home', type: 'movie', phase: 'Phase 4', releaseYear: '2021', branch: 'right', essential: true, desc: 'Phép thuật xé rách ranh giới Đa Vũ Trụ mang 3 Spider-Man hội ngộ.', doomsdayLink: 'Minh chứng cho việc rách màng ngăn cách giữa các Vũ Trụ (Incursion).', characters: ['Peter Parker (Tobey, Andrew, Tom)', 'Doctor Strange', 'Green Goblin'] },
+      { id: 'multiverse-of-madness', title: 'Doctor Strange in the Multiverse of Madness', type: 'movie', phase: 'Phase 4', releaseYear: '2022', branch: 'right', essential: true, desc: 'Doctor Strange xuyên qua các vũ trụ chống lại Wanda Maximoff.', doomsdayLink: 'Trực tiếp giới thiệu khái niệm Va Chạm Vũ Trụ (Incursions) - cốt lõi Secret Wars & Doomsday.', characters: ['Doctor Strange', 'Scarlet Witch', 'America Chavez', 'Illuminati'] },
+      { id: 'thor-4', title: 'Thor: Love and Thunder', type: 'movie', phase: 'Phase 4', releaseYear: '2022', branch: 'right', essential: false, desc: 'Thor đối đầu với Gorr Sát Thần.', doomsdayLink: 'Khám phá vương quốc của Eternity.', characters: ['Thor', 'Jane Foster / Mighty Thor', 'Gorr'] },
+      { id: 'wakanda-forever', title: 'Black Panther: Wakanda Forever', type: 'movie', phase: 'Phase 4', releaseYear: '2022', branch: 'right', essential: false, desc: 'Wakanda đối đầu với Namor và vương quốc dưới biển Talokan.', doomsdayLink: 'Giới thiệu Riri Williams (Ironheart) và khoáng chất Vibranium.', characters: ['Shuri', 'Namor', 'Riri Williams'] },
+      { id: 'quantumania', title: 'Ant-Man and the Wasp: Quantumania', type: 'movie', phase: 'Phase 5', releaseYear: '2023', branch: 'right', essential: true, desc: 'Gia đình Ant-Man bị hút vào Lượng Tử Giới.', doomsdayLink: 'Khám phá đô thị Lượng Tử Giới và mạng lưới Đa Vũ Trụ.', characters: ['Scott Lang', 'Kang', 'Cassie Lang'] },
+      { id: 'gotg-3', title: 'Guardians of the Galaxy Vol. 3', type: 'movie', phase: 'Phase 5', releaseYear: '2023', branch: 'right', essential: false, desc: 'Nhóm Vệ Binh chiến đấu cứu sống Rocket khỏi High Evolutionary.', doomsdayLink: 'Khép lại thế hệ Vệ Binh cũ, tạo lập biệt đội mới.', characters: ['Rocket', 'Star-Lord', 'High Evolutionary'] },
+      { id: 'the-marvels', title: 'The Marvels', type: 'movie', phase: 'Phase 5', releaseYear: '2023', branch: 'right', essential: true, desc: 'Captain Marvel, Kamala Khan và Monica Rambeau bị vướng mắc năng lượng.', doomsdayLink: 'Monica Rambeau rơi sang Vũ Trụ X-Men (có Beast/Binary) - cánh cửa X-Men vào Doomsday.', characters: ['Carol Danvers', 'Kamala Khan', 'Monica Rambeau', 'Beast'] },
+      { id: 'deadpool-and-wolverine', title: 'Deadpool & Wolverine', type: 'movie', phase: 'Phase 5', releaseYear: '2024', branch: 'right', essential: true, desc: 'Deadpool cùng Wolverine cứu vãn vũ trụ Fox khỏi bị phân rã bởi TVA.', doomsdayLink: 'Hội tụ Vũ trụ Fox (X-Men) chính thức kết nối vào MCU TVA.', characters: ['Deadpool', 'Wolverine', 'Cassandra Nova', 'TVA'] },
+      { id: 'captain-america-4', title: 'Captain America: Brave New World', type: 'movie', phase: 'Phase 5', releaseYear: '2025', branch: 'right', essential: true, desc: 'Sam Wilson làm Captain America đối diện tranh chấp toàn cầu về Adamantium.', doomsdayLink: 'Khai thác hòn đảo Celestial Tiamut & hợp chất Adamantium.', characters: ['Sam Wilson', 'Red Hulk (Thaddeus Ross)', 'Joaquin Torres'] },
+      { id: 'thunderbolts', title: 'Thunderbolts*', type: 'movie', phase: 'Phase 5', releaseYear: '2025', branch: 'right', essential: true, desc: 'Biệt đội анти-hero cựu chiến binh thực hiện nhiệm vụ nguy hiểm.', doomsdayLink: 'Tập hợp Yelena, Bucky, Sentry - biệt đội quan trọng trong trận chiến Doomsday.', characters: ['Yelena Belova', 'Bucky Barnes', 'Sentry', 'Red Guardian'] },
+      { id: 'fantastic-four-1', title: 'The Fantastic Four: First Steps', type: 'movie', phase: 'Phase 6', releaseYear: '2025', branch: 'right', essential: true, desc: 'Bộ Tứ Siêu Đẳng bối cảnh thập niên 60 ở một vũ trụ retro-futuristic.', doomsdayLink: 'QUAN TRỌNG NHẤT: Trực tiếp liên kết tới kẻ thù truyền kiếp Doctor Doom!', characters: ['Reed Richards', 'Sue Storm', 'Johnny Storm', 'Ben Grimm', 'Galactus'] },
+      { id: 'spider-man-4', title: 'Spider-Man: Brand New Day', type: 'movie', phase: 'Phase 6', releaseYear: '2026', branch: 'right', essential: true, desc: 'Chương mới của Peter Parker khi cả thế giới đã quên mất danh tính anh.', doomsdayLink: 'Bước đệm lớn cuối cùng ngay trước thềm Avengers: Doomsday.', characters: ['Peter Parker'] },
+
+      // LEFT BRANCH (TV Series, Street Level & Animated)
+      { id: 'agents-of-shield', title: 'Agents of S.H.I.E.L.D.', type: 'series', phase: 'Marvel TV', releaseYear: '2013-2020', branch: 'left', essential: false, desc: 'Đặc vụ Phil Coulson dẫn dắt đội đặc nhiệm S.H.I.E.L.D. xử lý các hiểm họa siêu nhiên.', doomsdayLink: 'Giới thiệu khái niệm du hành thời gian và Darkhold ban đầu.', characters: ['Phil Coulson', 'Daisy Johnson', 'FitzSimmons'] },
+      { id: 'agent-carter', title: 'Agent Carter', type: 'series', phase: 'Marvel TV', releaseYear: '2015-2016', branch: 'left', essential: false, desc: 'Peggy Carter thực hiện các nhiệm vụ tình báo sau Thế chiến II.', doomsdayLink: 'Xây dựng tổ chức tiền thân SSR và S.H.I.E.L.D.', characters: ['Peggy Carter', 'Jarvis'] },
+      { id: 'runaways', title: 'Runaways', type: 'series', phase: 'Marvel TV', releaseYear: '2017-2019', branch: 'left', essential: false, desc: 'Nhóm thiếu niên phát hiện cha mẹ mình thuộc hội tội phạm ma thuật Pride.', doomsdayLink: 'Mở rộng mảng ma thuật giới trẻ.', characters: ['Nico Minoru', 'Alex Wilder'] },
+      { id: 'inhumans', title: 'Inhumans', type: 'series', phase: 'Marvel TV', releaseYear: '2017', branch: 'left', essential: false, desc: 'Hoàng gia Inhumans chạy trốn xuống Trái Đất sau đảo chính.', doomsdayLink: 'Giới thiệu Black Bolt (biến thể sau này xuất hiện trong Doctor Strange 2).', characters: ['Black Bolt', 'Medusa'] },
+      { id: 'cloak-and-dagger', title: 'Cloak & Dagger', type: 'series', phase: 'Marvel TV', releaseYear: '2018-2019', branch: 'left', essential: false, desc: 'Hai người trẻ gắn kết bởi năng lượng Ánh sáng và Bóng tối.', doomsdayLink: 'Khám phá mảng sức mạnh bóng tối.', characters: ['Tandy Bowen', 'Tyrone Johnson'] },
+      { id: 'helstrom', title: 'Helstrom', type: 'series', phase: 'Marvel TV', releaseYear: '2020', branch: 'left', essential: false, desc: 'Hai anh em con trai của ác quỷ săn tìm các thực thể ma quỷ.', doomsdayLink: 'Mảng kinh dị tâm linh biệt lập.', characters: ['Daimon Helstrom', 'Ana Helstrom'] },
+      { id: 'daredevil-netflix', title: 'Daredevil', type: 'series', phase: 'Marvel TV', releaseYear: '2015-2018', branch: 'left', essential: true, desc: 'Luật sư mù Matt Murdock bảo vệ Hell\'s Kitchen đêm về.', doomsdayLink: 'Thiết lập hình tượng Daredevil và Kingpin gia nhập Vũ trụ MCU chính.', characters: ['Matt Murdock / Daredevil', 'Kingpin', 'Foggy Nelson'] },
+      { id: 'jessica-jones', title: 'Jessica Jones', type: 'series', phase: 'Marvel TV', releaseYear: '2015-2019', branch: 'left', essential: false, desc: 'Nữ thám tử tư có siêu sức mạnh đối đầu gã thao túng Kilgrave.', doomsdayLink: 'Tác phẩm Street-Level tăm tối.', characters: ['Jessica Jones', 'Kilgrave'] },
+      { id: 'luke-cage', title: 'Luke Cage', type: 'series', phase: 'Marvel TV', releaseYear: '2016-2018', branch: 'left', essential: false, desc: 'Người đàn ông da mình đồng xương sắt bảo vệ Harlem.', doomsdayLink: 'Phát triển nhóm Defender.', characters: ['Luke Cage', 'Cottonmouth'] },
+      { id: 'iron-fist', title: 'Iron Fist', type: 'series', phase: 'Marvel TV', releaseYear: '2017-2018', branch: 'left', essential: false, desc: 'Danny Rand trở về với quyền năng Nắm Đấm Thép từ Côn Lôn.', doomsdayLink: 'Mở rộng ma thuật võ thuật cổ truyền.', characters: ['Danny Rand', 'Colleen Wing'] },
+      { id: 'defenders', title: 'The Defenders', type: 'series', phase: 'Marvel TV', releaseYear: '2017', branch: 'left', essential: false, desc: 'Daredevil, Jessica Jones, Luke Cage và Iron Fist hợp lực đấu hội The Hand.', doomsdayLink: 'Sự kiện giao thoa Street-Level lớn nhất giai đoạn Netflix.', characters: ['Daredevil', 'Jessica Jones', 'Luke Cage', 'Iron Fist'] },
+      { id: 'punisher', title: 'The Punisher', type: 'series', phase: 'Marvel TV', releaseYear: '2017-2019', branch: 'left', essential: false, desc: 'Frank Castle trừng phạt những kẻ gây ra cái chết cho gia đình mình.', doomsdayLink: 'Chuẩn bị cho sự tái xuất của Punisher trong Born Again.', characters: ['Frank Castle / Punisher', 'Micro'] },
+      { id: 'wandavision', title: 'WandaVision', type: 'series', phase: 'Phase 4', releaseYear: '2021', branch: 'left', essential: true, desc: 'Wanda tạo ra thực tại ảo Westview để sống cùng Vision.', doomsdayLink: 'Thức tỉnh Scarlet Witch & mở ra cuốn sách ma thuật cấm Darkhold.', characters: ['Wanda Maximoff', 'Vision', 'Agatha Harkness'] },
+      { id: 'falcon-winter-soldier', title: 'The Falcon and the Winter Soldier', type: 'series', phase: 'Phase 4', releaseYear: '2021', branch: 'left', essential: true, desc: 'Sam Wilson và Bucky Barnes tiếp quản di sản chiếc khiên Captain America.', doomsdayLink: 'Khai sinh Captain America mới & giới thiệu Valentina Allegra de Fontaine.', characters: ['Sam Wilson', 'Bucky Barnes', 'John Walker'] },
+      { id: 'loki-1', title: 'Loki (Mùa 1)', type: 'series', phase: 'Phase 4', releaseYear: '2021', branch: 'left', essential: true, desc: 'Loki bị cơ quan quản lý thời gian TVA bắt giữ.', doomsdayLink: 'CỰC KỲ TRỌNG TÂM: Mở ra cây Đa Vũ Trụ và các biến thể thời gian.', characters: ['Loki', 'Sylvie', 'Mobius', 'He Who Remains'] },
+      { id: 'what-if-1', title: 'What If...? (Mùa 1)', type: 'animated', phase: 'Phase 4', releaseYear: '2021', branch: 'left', essential: false, desc: 'Khám phá các vũ trụ song song nơi các sự kiện xảy ra khác đi.', doomsdayLink: 'Minh họa sự đa dạng vô tận của các chiều không gian Đa Vũ Trụ.', characters: ['The Watcher', 'Captain Carter', 'Strange Supreme'] },
+      { id: 'hawkeye', title: 'Hawkeye', type: 'series', phase: 'Phase 4', releaseYear: '2021', branch: 'left', essential: false, desc: 'Clint Barton truyền lại danh hiệu cho Kate Bishop tại New York.', doomsdayLink: 'Giới thiệu Kingpin và Kate Bishop cho Young Avengers.', characters: ['Clint Barton', 'Kate Bishop', 'Yelena Belova', 'Kingpin'] },
+      { id: 'moon-knight', title: 'Moon Knight', type: 'series', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Steven Grant phát hiện mình mang đa nhân cách và là đại sứ thần Ai Cập Khonshu.', doomsdayLink: 'Mở rộng khía cạnh thần thoại ma thuật Ai Cập.', characters: ['Marc Spector / Moon Knight', 'Arthur Harrow'] },
+      { id: 'ms-marvel', title: 'Ms. Marvel', type: 'series', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Cô bé Kamala Khan có được sức mạnh ánh sáng từ chiếc vòng cổ cổ đại.', doomsdayLink: 'Chiếc vòng liên kết tới Mười Vòng Shang-Chi & Đa Vũ Trụ.', characters: ['Kamala Khan / Ms. Marvel'] },
+      { id: 'she-hulk', title: 'She-Hulk: Attorney at Law', type: 'series', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Nữ luật sư Jennifer Walters xử lý các vụ án liên quan siêu anh hùng.', doomsdayLink: 'Phá vỡ bức tường thứ 4 và giới thiệu Skaar con trai Hulk.', characters: ['Jennifer Walters', 'Bruce Banner', 'Daredevil'] },
+      { id: 'i-am-groot-1', title: 'I Am Groot', type: 'animated', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Các cuộc phiêu lưu ngắn hài hước của Baby Groot.', doomsdayLink: 'Nội dung thư giãn vũ trụ.', characters: ['Baby Groot'] },
+      { id: 'werewolf-by-night', title: 'Werewolf by Night', type: 'series', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Đêm săn quái vật huyền bí để tranh giành Huyết Thạch.', doomsdayLink: 'Giới thiệu thế giới quái vật và Man-Thing.', characters: ['Jack Russell', 'Elsa Bloodstone', 'Man-Thing'] },
+      { id: 'gotg-holiday', title: 'The Guardians of the Galaxy Holiday Special', type: 'series', phase: 'Phase 4', releaseYear: '2022', branch: 'left', essential: false, desc: 'Vệ binh Vũ Trụ tới Trái Đất bắt cóc Kevin Bacon làm quà Giáng Sinh cho Quill.', doomsdayLink: 'Thắt chặt tình cảm gia đình Vệ Binh.', characters: ['Star-Lord', 'Drax', 'Mantis'] },
+      { id: 'secret-invasion', title: 'Secret Invasion', type: 'series', phase: 'Phase 5', releaseYear: '2023', branch: 'left', essential: false, desc: 'Nick Fury ngăn chặn cuộc xâm nhập ngầm của chủng tộc Skrull.', doomsdayLink: 'Xây dựng bối cảnh bất ổn chính trị trên Trái Đất.', characters: ['Nick Fury', 'Talos', 'G\'iah'] },
+      { id: 'loki-2', title: 'Loki (Mùa 2)', type: 'series', phase: 'Phase 5', releaseYear: '2023', branch: 'left', essential: true, desc: 'Loki trở thành Vua Thời Gian (God Loki) giữ vững Cây Thời Gian Đa Vũ Trụ.', doomsdayLink: 'CỰC KỲ TRỌNG TÂM: Nền tảng duy trì toàn bộ Đa Vũ Trụ cho Doomsday!', characters: ['God Loki', 'Mobius', 'O.B.', 'Sylvie'] },
+      { id: 'what-if-2', title: 'What If...? (Mùa 2)', type: 'animated', phase: 'Phase 5', releaseYear: '2023', branch: 'left', essential: false, desc: 'Tiếp tục khám phá các biến thể vũ trụ mới.', doomsdayLink: 'Mở rộng nhân vật Kahhori.', characters: ['The Watcher', 'Kahhori'] },
+      { id: 'echo', title: 'Echo', type: 'series', phase: 'Phase 5', releaseYear: '2024', branch: 'left', essential: false, desc: 'Maya Lopez trở về quê nhà chạy trốn đế chế Kingpin.', doomsdayLink: 'Tiền đề cho Kingpin tranh cử Thị trưởng New York.', characters: ['Maya Lopez', 'Kingpin', 'Daredevil'] },
+      { id: 'x-men-97-1', title: 'X-Men \'97 (Mùa 1)', type: 'animated', phase: 'Phase 5', releaseYear: '2024', branch: 'left', essential: true, desc: 'Hồi sinh series huyền thoại về nhóm Dị Nhân X-Men.', doomsdayLink: 'Kết nối tinh thần X-Men bước vào MCU Đa Vũ Trụ.', characters: ['Cyclops', 'Jean Grey', 'Magneto', 'Wolverine'] },
+      { id: 'agatha-all-along', title: 'Agatha All Along', type: 'series', phase: 'Phase 5', releaseYear: '2024', branch: 'left', essential: true, desc: 'Agatha Harkness lấy lại sức mạnh qua Con Đường Phù Thủy.', doomsdayLink: 'Giới thiệu Billy Maximoff (Wiccan) - nhân vật chủ chốt Young Avengers.', characters: ['Agatha Harkness', 'Billy Maximoff / Wiccan', 'Rio Vidal'] },
+      { id: 'what-if-3', title: 'What If...? (Mùa 3)', type: 'animated', phase: 'Phase 5', releaseYear: '2024', branch: 'left', essential: false, desc: 'Mùa cuối cùng của series What If Đa Vũ Trụ.', doomsdayLink: 'Khép lại góc nhìn các câu chuyện song song.', characters: ['The Watcher', 'Storm (Mjolnir)'] },
+      { id: 'spider-man-freshman', title: 'Your Friendly Neighborhood Spider-Man', type: 'animated', phase: 'Phase 5', releaseYear: '2025', branch: 'left', essential: false, desc: 'Hành trình năm đầu làm Nhện của Peter Parker ở một vũ trụ song song.', doomsdayLink: 'Góc nhìn hoạt họa mới về Nhện.', characters: ['Peter Parker', 'Norman Osborn'] },
+      { id: 'daredevil-born-again-1', title: 'Daredevil: Born Again (Mùa 1)', type: 'series', phase: 'Phase 5', releaseYear: '2025', branch: 'left', essential: true, desc: 'Matt Murdock và Kingpin đối đầu nảy lửa tại New York.', doomsdayLink: 'Trọng tâm nhánh Street-Level của MCU.', characters: ['Matt Murdock / Daredevil', 'Kingpin', 'Punisher'] },
+      { id: 'ironheart', title: 'Ironheart', type: 'series', phase: 'Phase 5', releaseYear: '2025', branch: 'left', essential: true, desc: 'Riri Williams kết hợp công nghệ giáp sắt đỉnh cao và ma thuật.', doomsdayLink: 'Sự va chạm giữa Khoa học (Tech) và Ma thuật (Magic).', characters: ['Riri Williams / Ironheart', 'The Hood'] },
+      { id: 'eyes-of-wakanda', title: 'Eyes of Wakanda', type: 'animated', phase: 'Phase 5', releaseYear: '2025', branch: 'left', essential: false, desc: 'Các chiến binh Wakanda qua các thời kỳ thực hiện nhiệm vụ thu hồi Vibranium.', doomsdayLink: 'Lịch sử lâu đời của Wakanda.', characters: ['War Dogs Wakanda'] },
+      { id: 'marvel-zombies', title: 'Marvel Zombies', type: 'animated', phase: 'Phase 5', releaseYear: '2025', branch: 'left', essential: false, desc: 'Thế giới Đa Vũ Trụ bị đại dịch Zombie xâm chiếm.', doomsdayLink: 'Vũ trụ Zombie tăm tối.', characters: ['Kamala Khan', 'Yelena', 'Zombie Wanda'] },
+      { id: 'wonder-man', title: 'Wonder Man', type: 'series', phase: 'Phase 6', releaseYear: '2025', branch: 'left', essential: false, desc: 'Diễn viên Simon Williams có được sức mạnh ion kỳ lạ.', doomsdayLink: 'Góc nhìn châm biếm Hollywood trong thế giới siêu anh hùng.', characters: ['Simon Williams / Wonder Man', 'Trevor Slattery'] },
+      { id: 'daredevil-born-again-2', title: 'Daredevil: Born Again (Mùa 2)', type: 'series', phase: 'Phase 6', releaseYear: '2026', branch: 'left', essential: false, desc: 'Chương tiếp theo của hiệp sĩ mù Daredevil.', doomsdayLink: 'Củng cố nhánh Street-Level.', characters: ['Matt Murdock'] },
+      { id: 'punisher-special', title: 'The Punisher (Special Presentation)', type: 'series', phase: 'Phase 6', releaseYear: '2026', branch: 'left', essential: false, desc: 'Dự án đặc biệt về gã trừng phạt Frank Castle.', doomsdayLink: 'Nhánh hành động tàn khốc.', characters: ['Frank Castle'] },
+      { id: 'x-men-97-2', title: 'X-Men \'97 (Mùa 2)', type: 'animated', phase: 'Phase 6', releaseYear: '2026', branch: 'left', essential: false, desc: 'Nhóm Dị Nhân đối mặt với hiểm họa du hành thời gian Apocalypse.', doomsdayLink: 'Chuẩn bị lực lượng Dị nhân cho Secret Wars.', characters: ['Magneto', 'Cyclops'] },
+      { id: 'vision-quest', title: 'Vision Quest', type: 'series', phase: 'Phase 6', releaseYear: '2026', branch: 'left', essential: true, desc: 'Vision Trắng tìm kiếm lại ký ức và bản ngã con người.', doomsdayLink: 'Khôi phục nhân dạng Vision chìa khóa gia đình Wanda/Vision.', characters: ['White Vision', 'Tommy Maximoff'] },
+      { id: 'spider-man-series', title: 'Spider-Man Animated / Special', type: 'animated', phase: 'Phase 6', releaseYear: '2026', branch: 'left', essential: false, desc: 'Dự án hoạt họa ngắn hỗ trợ không gian Spider-Verse.', doomsdayLink: 'Liên kết mạng nhện Đa Vũ Trụ.', characters: ['Spider-Man Variants'] }
+    ];
+
+    // STATE & LOCAL STORAGE MANAGERS
+    const STORAGE_KEY = 'mcu_watched_ids_v2';
+    let watchedIds = new Set();
+    let currentFilter = 'all';
+    let currentPhase = 'all';
+    let currentSearch = '';
+    let currentViewMode = 'flow'; // 'flow' or 'grid'
+
+    // Load from LocalStorage safely
+    function loadWatchedState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            watchedIds = new Set(parsed);
+          }
+        }
+      } catch (err) {
+        console.warn('Cannot load from localStorage:', err);
+      }
+    }
+
+    // Save to LocalStorage safely
+    function saveWatchedState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(watchedIds)));
+      } catch (err) {
+        console.warn('Cannot save to localStorage:', err);
+      }
+      updateDashboardStats();
+    }
+
+    // Toggle Watched Status
+    function toggleWatch(id) {
+      if (watchedIds.has(id)) {
+        watchedIds.delete(id);
+      } else {
+        watchedIds.add(id);
+      }
+      saveWatchedState();
+      renderCurrentView();
+    }
+
+    // Reset All Progress
+    function resetAllWatched() {
+      watchedIds.clear();
+      saveWatchedState();
+      renderCurrentView();
+    }
+
+    // Update Overview Stats
+    function updateDashboardStats() {
+      const total = mcuData.length;
+      const watched = watchedIds.size;
+      const percentage = total > 0 ? Math.round((watched / total) * 100) : 0;
+
+      const progressText = document.getElementById('progress-text');
+      const progressBar = document.getElementById('progress-bar');
+      const essentialCounter = document.getElementById('essential-counter');
+
+      if (progressText) progressText.textContent = `${watched} / ${total} (${percentage}%)`;
+      if (progressBar) progressBar.style.width = `${percentage}%`;
+
+      const essentialTotal = mcuData.filter(i => i.essential).length;
+      const essentialWatched = mcuData.filter(i => i.essential && watchedIds.has(i.id)).length;
+      if (essentialCounter) essentialCounter.textContent = `Trọng tâm: ${essentialWatched}/${essentialTotal}`;
+    }
+
+    // Helper to Filter Item
+    function isItemVisible(item) {
+      // Search filter
+      if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        const matchTitle = item.title.toLowerCase().includes(q);
+        const matchDesc = (item.desc || '').toLowerCase().includes(q);
+        const matchChar = (item.characters || []).some(c => c.toLowerCase().includes(q));
+        if (!matchTitle && !matchDesc && !matchChar) return false;
+      }
+
+      // Filter tabs
+      if (currentFilter === 'essential' && !item.essential) return false;
+      if (currentFilter === 'movie' && item.type !== 'movie') return false;
+      if (currentFilter === 'series' && item.type !== 'series' && item.type !== 'animated') return false;
+      if (currentFilter === 'unwatched' && watchedIds.has(item.id)) return false;
+
+      // Phase dropdown
+      if (currentPhase !== 'all' && item.phase !== currentPhase) return false;
+
+      return true;
+    }
+
+    // Create Card HTML String
+    function createCardHTML(item) {
+      const isWatched = watchedIds.has(item.id);
+
+      let badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+      if (item.type === 'series') badgeColor = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+      if (item.type === 'animated') badgeColor = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+
+      const typeLabel = item.type === 'movie' ? 'Phim Điện Ảnh' : (item.type === 'series' ? 'TV Series' : 'Hoạt Hình');
+
+      return `
+        <div data-id="${item.id}" class="mcu-card cursor-pointer glass-panel p-3.5 sm:p-4 rounded-xl border ${isWatched ? 'border-emerald-500/60 bg-emerald-950/20' : 'border-slate-800'} card-hover relative group">
+          
+          <div class="flex items-start gap-3">
+            
+            <!-- Poster Placeholder Thumbnail -->
+            <div class="w-12 h-16 rounded-lg bg-slate-800 border border-slate-700 flex-shrink-0 flex items-center justify-center text-center p-1 relative group-hover:border-emerald-500/50 transition-colors">
+              <i class="${item.type === 'movie' ? 'fa-solid fa-film text-emerald-400' : 'fa-solid fa-tv text-blue-400'} text-lg"></i>
+            </div>
+
+            <!-- Content Info -->
+            <div class="flex-1 min-w-0 pr-6">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeColor} font-semibold">${typeLabel}</span>
+                <span class="text-[11px] text-slate-400 font-medium">${item.releaseYear || ''}</span>
+              </div>
+              <h4 class="font-bold text-slate-100 font-title text-sm truncate group-hover:text-emerald-400 transition-colors">${item.title}</h4>
+              <p class="text-xs text-slate-400 line-clamp-2 mt-0.5 leading-snug">${item.desc || ''}</p>
+            </div>
+
+            <!-- Essential Doomsday Bolt Badge (Positioned inside top right without overflow) -->
+            ${item.essential ? `
+              <div title="Trọng tâm Doomsday" class="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-[10px] font-black shadow-md">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+            ` : ''}
+
+          </div>
+
+          <!-- Bottom Bar -->
+          <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <button data-action="toggle-watch" data-id="${item.id}" class="watch-btn flex items-center gap-1.5 px-2.5 py-1 rounded-lg ${isWatched ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700'} transition-all">
+              <i class="fa-solid ${isWatched ? 'fa-circle-check text-emerald-400' : 'fa-circle text-slate-600'}"></i>
+              <span>${isWatched ? 'Đã xem' : 'Chưa xem'}</span>
+            </button>
+            <span class="text-[11px] text-slate-500 font-medium">${item.phase || 'MCU'}</span>
+          </div>
+
+        </div>
+      `;
+    }
+
+    // Render Flowchart View
+    function renderFlowView() {
+      const leftNodesContainer = document.getElementById('left-branch-nodes');
+      const rightNodesContainer = document.getElementById('right-branch-nodes');
+
+      if (!leftNodesContainer || !rightNodesContainer) return;
+
+      const leftItems = mcuData.filter(i => i.branch === 'left' && isItemVisible(i));
+      const rightItems = mcuData.filter(i => i.branch === 'right' && isItemVisible(i));
+
+      if (leftItems.length === 0) {
+        leftNodesContainer.innerHTML = `<div class="p-4 text-center text-slate-500 text-xs italic bg-slate-900/40 rounded-xl border border-slate-800">Không có dự án TV/Hoạt hình phù hợp</div>`;
+      } else {
+        leftNodesContainer.innerHTML = leftItems.map((item, idx) => `
+          <div class="relative">
+            ${createCardHTML(item)}
+            ${idx < leftItems.length - 1 ? `
+              <div class="flex justify-center my-2">
+                <div class="w-0.5 h-4 bg-blue-500/40"></div>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+
+      if (rightItems.length === 0) {
+        rightNodesContainer.innerHTML = `<div class="p-4 text-center text-slate-500 text-xs italic bg-slate-900/40 rounded-xl border border-slate-800">Không có phim điện ảnh phù hợp</div>`;
+      } else {
+        rightNodesContainer.innerHTML = rightItems.map((item, idx) => `
+          <div class="relative">
+            ${createCardHTML(item)}
+            ${idx < rightItems.length - 1 ? `
+              <div class="flex justify-center my-2">
+                <div class="w-0.5 h-4 bg-emerald-500/40"></div>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+    }
+
+    // Render Phase Grid View
+    function renderGridView() {
+      const gridContainer = document.getElementById('grid-phases-container');
+      if (!gridContainer) return;
+
+      const phases = ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5', 'Phase 6', 'Marvel TV'];
+      
+      let html = '';
+
+      phases.forEach(phase => {
+        const items = mcuData.filter(i => i.phase === phase && isItemVisible(i));
+        if (items.length === 0) return;
+
+        html += `
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+              <h3 class="font-bold font-title text-emerald-400 text-lg sm:text-xl uppercase tracking-wider">${phase}</h3>
+              <span class="text-xs text-slate-500 font-medium">(${items.length} tác phẩm)</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              ${items.map(item => createCardHTML(item)).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      if (!html) {
+        html = `<div class="p-12 text-center text-slate-400 glass-panel rounded-2xl">Không tìm thấy tác phẩm nào khớp với bộ lọc của bạn.</div>`;
+      }
+
+      gridContainer.innerHTML = html;
+    }
+
+    // Switch View Rendering
+    function renderCurrentView() {
+      if (currentViewMode === 'flow') {
+        document.getElementById('flow-view-section').classList.remove('hidden');
+        document.getElementById('grid-view-section').classList.add('hidden');
+        renderFlowView();
+      } else {
+        document.getElementById('flow-view-section').classList.add('hidden');
+        document.getElementById('grid-view-section').classList.remove('hidden');
+        renderGridView();
+      }
+      attachCardListeners();
+    }
+
+    // Open Detail Modal
+    function openModal(item) {
+      const modal = document.getElementById('detail-modal');
+      const isWatched = watchedIds.has(item.id);
+
+      document.getElementById('modal-title').textContent = item.title;
+      document.getElementById('modal-phase').textContent = item.phase;
+      document.getElementById('modal-year').textContent = `• ${item.releaseYear}`;
+      document.getElementById('modal-desc').textContent = item.desc || 'Chưa có thông tin tóm tắt.';
+      document.getElementById('modal-doomsday-link').textContent = item.doomsdayLink || 'Dự án liên kết vào mạng lưới Đa Vũ Trụ.';
+
+      const badge = document.getElementById('modal-type-badge');
+      badge.textContent = item.type === 'movie' ? 'Phim Điện Ảnh' : (item.type === 'series' ? 'TV Series' : 'Hoạt Hình');
+      badge.className = `text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase border ${item.type === 'movie' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-blue-500/20 text-blue-300 border-blue-500/40'}`;
+
+      const charContainer = document.getElementById('modal-characters');
+      charContainer.innerHTML = (item.characters || ['Đang cập nhật']).map(c => `
+        <span class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 text-xs">${c}</span>
+      `).join('');
+
+      const toggleBtn = document.getElementById('modal-toggle-watch');
+      toggleBtn.innerHTML = isWatched 
+        ? `<i class="fa-solid fa-xmark"></i> Bỏ Đánh Dấu Đã Xem` 
+        : `<i class="fa-solid fa-check"></i> Đánh Dấu Đã Xem`;
+      toggleBtn.className = `px-4 py-2 rounded-xl font-bold text-xs transition-colors flex items-center gap-2 ${isWatched ? 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700' : 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'}`;
+
+      toggleBtn.onclick = () => {
+        toggleWatch(item.id);
+        openModal(item);
+      };
+
+      modal.classList.remove('hidden');
+      setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    }
+
+    // Close Modal
+    function closeModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.add('opacity-0');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    // Attach Event Listeners to Cards
+    function attachCardListeners() {
+      document.querySelectorAll('.mcu-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          const watchBtn = e.target.closest('[data-action="toggle-watch"]');
+          const id = card.getAttribute('data-id');
+          if (watchBtn) {
+            e.stopPropagation();
+            toggleWatch(id);
+            return;
+          }
+          const item = mcuData.find(i => i.id === id);
+          if (item) openModal(item);
+        });
+      });
+    }
+
+    // DOM EVENT LISTENERS INIT
+    document.addEventListener('DOMContentLoaded', () => {
+      loadWatchedState();
+      updateDashboardStats();
+
+      // Search Handler
+      const searchInput = document.getElementById('search-input');
+      searchInput?.addEventListener('input', (e) => {
+        currentSearch = e.target.value.trim();
+        renderCurrentView();
+      });
+
+      // Filter Tabs Handler
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => {
+            t.classList.remove('active', 'bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/40');
+            t.classList.add('bg-slate-800/80', 'text-slate-300', 'border-slate-700');
+          });
+          tab.classList.add('active', 'bg-emerald-500/20', 'text-emerald-300', 'border-emerald-500/40');
+          tab.classList.remove('bg-slate-800/80', 'text-slate-300', 'border-slate-700');
+          
+          currentFilter = tab.getAttribute('data-filter');
+          renderCurrentView();
+        });
+      });
+
+      // Phase Selector
+      const phaseSelect = document.getElementById('phase-select');
+      phaseSelect?.addEventListener('change', (e) => {
+        currentPhase = e.target.value;
+        renderCurrentView();
+      });
+
+      // View Switcher Buttons
+      const viewFlowBtn = document.getElementById('view-flow-btn');
+      const viewGridBtn = document.getElementById('view-grid-btn');
+
+      viewFlowBtn?.addEventListener('click', () => {
+        currentViewMode = 'flow';
+        viewFlowBtn.className = 'px-3 py-1.5 rounded-md bg-emerald-500 text-slate-950 font-bold transition-all flex items-center gap-1.5';
+        viewGridBtn.className = 'px-3 py-1.5 rounded-md text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5';
+        renderCurrentView();
+      });
+
+      viewGridBtn?.addEventListener('click', () => {
+        currentViewMode = 'grid';
+        viewGridBtn.className = 'px-3 py-1.5 rounded-md bg-emerald-500 text-slate-950 font-bold transition-all flex items-center gap-1.5';
+        viewFlowBtn.className = 'px-3 py-1.5 rounded-md text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5';
+        renderCurrentView();
+      });
+
+      // Modal Close Listeners
+      document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
+      document.getElementById('detail-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'detail-modal') closeModal();
+      });
+
+      // Reset Confirmation Modal
+      const resetBtn = document.getElementById('reset-watch-btn');
+      const confirmDialog = document.getElementById('confirm-dialog');
+      const confirmCancel = document.getElementById('confirm-cancel');
+      const confirmOk = document.getElementById('confirm-ok');
+
+      resetBtn?.addEventListener('click', () => {
+        confirmDialog.classList.remove('hidden');
+        setTimeout(() => confirmDialog.classList.remove('opacity-0'), 10);
+      });
+
+      confirmCancel?.addEventListener('click', () => {
+        confirmDialog.classList.add('opacity-0');
+        setTimeout(() => confirmDialog.classList.add('hidden'), 200);
+      });
+
+      confirmOk?.addEventListener('click', () => {
+        resetAllWatched();
+        confirmDialog.classList.add('opacity-0');
+        setTimeout(() => confirmDialog.classList.add('hidden'), 200);
+      });
+
+      // Click on Doomsday destination banner opens its details
+      document.getElementById('doomsday-destination')?.addEventListener('click', () => {
+        openModal({
+          id: 'avengers-doomsday',
+          title: 'Avengers: Doomsday',
+          phase: 'Phase 6',
+          type: 'movie',
+          releaseYear: '2026',
+          desc: 'Cuộc đụng độ hoành tráng nhất Đa Vũ Trụ khi Doctor Doom trỗi dậy làm lung lay nền tảng thực tại. Robert Downey Jr. chính thức tái xuất MCU.',
+          doomsdayLink: 'Đích đến cuối cùng của toàn bộ các nhánh dòng thời gian và đa vũ trụ Marvel!',
+          characters: ['Victor Von Doom / Doctor Doom', 'Fantastic Four', 'Avengers', 'Thunderbolts', 'X-Men']
+        });
+      });
+
+      // Initial View Render
+      renderCurrentView();
+    });
+  </script>
+</body>
+</html>
