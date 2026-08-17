@@ -889,6 +889,7 @@
       window.addEventListener('resize', () => {
         if (currentViewMode === 'flow') {
           renderFlowView();
+          attachCardListeners();
         }
       });
 
